@@ -1,0 +1,27 @@
+
+<div class="cont container-fluid">
+
+    <div class="cont container d-flex justify-content-center flex-column align-items-center">
+        <label>
+
+            <h2>
+                <strong>LOGIN</strong>
+            </h2>
+
+        </label>
+         <mat-form-field appearance="fill">
+            <mat-label>Nombre de usuario</mat-label>
+            <input [(ngModel)]="_name"  matInput>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input [(ngModel)]="_password"  matInput>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="Login(_name, _password)" >Ingresar</button>
+    </div>
+
+
+</div>
+
+
+

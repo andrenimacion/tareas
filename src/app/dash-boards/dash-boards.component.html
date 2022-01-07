@@ -1,0 +1,27 @@
+
+<app-header></app-header>
+<div class="cont container-fluid d-flex ">
+    <div class="w-75">
+        <textarea class="form-control" rows="32" [(ngModel)]="_DATA"
+                  (keyup.enter)="detectSave(_DATA)"></textarea>
+    </div>    
+    <div class="cont w-25 p-3" id="panelHistory">
+        <div class="container-fluid p-2 text-success"> {{msjDel}} </div>
+        <ul class="p-0" style="list-style: none;">
+            <li class="p-0" *ngFor=" let x of arrNotesGet " style="color: yellow; border-bottom: solid 0.5px yellow;">
+                {{ x.title_notas }} <br>
+                <div class="d-flex justify-content-between">
+                    <span class="notes text-primary" > {{x.fecha_notes | date: 'medium'}} </span>
+                    <span class="notes text-danger" style="cursor: pointer;" (click)="delNotes(x.code_notes)" >DELETE</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+
+

@@ -1,0 +1,37 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100vh; }
+body { 
+    margin: 0;
+    // font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-color: rgb(14, 31, 14);
+}
+
+
+.cont {
+    height: 100%;
+}
+
+input {
+    color: yellowgreen !important;
+}
+
+
+label{
+    color: yellowgreen !important;
+}
+
+*{font-family: 'Roboto Mono', monospace;}
+
+textarea {
+    font-family: 'Roboto Mono', monospace;
+    color: yellowgreen !important;
+    background-color: rgb(14, 31, 14) !important;
+    border: none !important;
+    font-size: 10pt !important;
+}
+
+
+textarea:focus, input:focus{
+    outline: none !important;
+}
