@@ -1,5 +1,5 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, ElementRef, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { DataformService } from '../services/dataform.service';
 import { LoginService } from '../services/login.service';
 
@@ -15,16 +15,19 @@ export class DashBoardsComponent implements OnInit {
   public msjDel: any = '';
   public _SHA: boolean = false;
   public xfunc: string = 'POST[]';
-  constructor( private notes: DataformService, private us: LoginService, private host: ElementRef ) { }
+  constructor( private notes: DataformService, private us: LoginService, private host: ElementRef, public router: Router ) { }
   public xuser: any = sessionStorage.getItem('TOKEN');
 
   ngOnInit(): void {
 
     this.getNotesGeneral(this.xuser, 'fecha_notes', 'desc')
-    this.getUsers('cod_session', '2', 'asc');
+    setInterval(()=>{
+      this.getUsers('cod_session', '2', 'asc');
+    },500)
     this.getCodecShar();
     localStorage.setItem('FUNCTION', 'POST[]');
     this.msjDel = localStorage.getItem('FUNCTION');
+    this.verification();
 
   }
 
@@ -80,7 +83,7 @@ export class DashBoardsComponent implements OnInit {
   getNotesGeneral(codec: string, fecha_notes: string, order: string) {
     this.notes.getData(codec, fecha_notes, order).subscribe( not => {
       this.arrNotesGet = not;
-      console.log(this.arrNotesGet);
+      //console.log(this.arrNotesGet);
     })
   }
 
@@ -121,7 +124,7 @@ export class DashBoardsComponent implements OnInit {
     
     if(a.indexOf('help:>') > 0) {
       
-      this._DATA = '>>\n' + 'help:> Muestra la lista de línea de comandos a utilizar en pscript.\nmatch:> Muestra registro de usuarios en la aplicación.\nclear:> Limpia la consola y cierra ventanas emergentes.\ncodecsha:> Genera código SHA para compartir nota con otros usuarios.\ngetsha:> Muestra lista de mis códigos SHA registrados con los usuarios emisores.\n';
+      this._DATA = '>>\n' + 'help:> Muestra la lista de línea de comandos a utilizar en pscript.\nfunc:> Establece la accion de tu consola.\nfunc:>[SETPOST[]] Guarda la nota a escribir, func:>[SETUPDATE[]] Actualiza la nota a escribir\nmatch:> Muestra registro de usuarios en la aplicación.\nclear:> Limpia la consola y cierra ventanas emergentes.\ncodecsha:> Genera código SHA para compartir nota con otros usuarios.\ngetsha:> Muestra lista de mis códigos SHA registrados con los usuarios emisores.\n';
 
     }
     else if(a.indexOf('match:>') > 0 ) {
@@ -147,14 +150,56 @@ export class DashBoardsComponent implements OnInit {
     else if(a.indexOf('func:>') > 0 ) {
       if( a.indexOf('func:>[SETPOST[]]') > 0 ) {
         localStorage.setItem('FUNCTION', 'POST[]');
-        this.msjDel = 'POST[]';
+        this.msjDel = 'Change to POST[]';
+        setTimeout(() => {
+          this.msjDel = 'POST[]';
+          this._DATA = '>>'
+        }, 1500);
       }
       else if(a.indexOf('func:>[SETUPDATE[]]') > 0) {
         localStorage.setItem('FUNCTION', 'UPDATE[]');
-        this.msjDel = 'UPDATE[]';
+        this.msjDel = 'Change to UPDATE[]';
+        setTimeout(() => {
+          this.msjDel = 'UPDATE[]';
+          this._DATA = '>>'
+        }, 1500);
       }
     }
+    else if ( a.indexOf('session[off]:>') > 0 ) {
+      sessionStorage.removeItem('TOKEN');
+      sessionStorage.removeItem('USER');
+      sessionStorage.removeItem('TOKEN-SESSION');
+      this._DATA = '>>Close session acepted... wait two seconds';
+      //UID
+      const xxx: any = sessionStorage.getItem('UID')
+      setTimeout(() => {
+        this.verification();
+        this.upState( xxx, 'offline')
+      }, 2000);
+    }
+
+    else if(a.indexOf('')) {
+      
+    }
   
+  }
+
+  verification() {
+    if( sessionStorage.getItem('TOKEN') == undefined || sessionStorage.getItem('TOKEN') == '' ) {
+      this.router.navigate(['/Login'])
+    }
+    else if(sessionStorage.getItem('USER') == undefined || sessionStorage.getItem('USER') == '') {
+      this.router.navigate(['/Login'])
+    }
+    else if(sessionStorage.getItem('TOKEN-SESSION') == undefined || sessionStorage.getItem('TOKEN-SESSION') == '') {
+      this.router.navigate(['/Login'])
+    }
+  }
+
+  upState( id: number, state: string) {
+    this.us.updatEstate( id, state ).subscribe( u => {
+      console.log('CONECTADO')
+    })
   }
 
 
@@ -188,7 +233,7 @@ export class DashBoardsComponent implements OnInit {
 
   triggerFunction(event: any) {
     console.log(event);
-    if (event.ctrlKey && event.key === 'Enter') {
+    if (event.ctrlKey && event.key === 'Enter' || event.shiftKey && event.key === 'Enter') {
     
        /*
          cannot make textarea produce a next line.
@@ -202,7 +247,7 @@ export class DashBoardsComponent implements OnInit {
 
     } 
     
-    else if (event.key === 'Enter') {
+    else if (event.key === 'Enter' ) {
        event.preventDefault();
        let x: any = localStorage.getItem('FUNCTION');
 
@@ -262,6 +307,10 @@ export class DashBoardsComponent implements OnInit {
 
       this.notes.updateNotes(ids, this.arrNotes).subscribe( UPNOT => {
         this.msjDel = 'UPDATE SUCCESSFULLY!'
+        this.getNotesGeneral(this.xuser, 'fecha_notes', 'desc')
+        setTimeout(() => {
+          this.msjDel = 'UPDATE[]'
+        }, 1500)
       }, () => {
         this.msjDel = 'ERROR UPDATE!'
       })

@@ -42,14 +42,23 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/Dashboards'])
 
       this.arrLog = log;
-      sessionStorage.setItem('USER', this.arrLog.name_user)  
-      sessionStorage.setItem('TOKEN', this.arrLog.cod_user)  
-      sessionStorage.setItem('TOKEN-SESSION', this.arrLog.cod_session)  
+      sessionStorage.setItem('USER', this.arrLog.name_user);  
+      sessionStorage.setItem('TOKEN', this.arrLog.cod_user); 
+      sessionStorage.setItem('TOKEN-SESSION', this.arrLog.cod_session);  
+      sessionStorage.setItem('UID', this.arrLog.id);  
+      this.upState( this.arrLog.id, 'online');
 
     }, (err) => {
       alert('ERROR LOGIN')
     })
 
+  }
+
+
+  upState( id: number, state: string) {
+    this.L.updatEstate( id, state ).subscribe( u => {
+      console.log('CONECTADO')
+    })
   }
 
 

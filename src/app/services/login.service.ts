@@ -18,4 +18,8 @@ export class LoginService {
     return this.http.get( this.urlapi + 'UserLogin/getuserNotes/' + PROPERTIES + '/' + filter + '/' + order );
   }
 
+  updatEstate( id: number, state: string ) {
+    return this.http.get( this.urlapi + 'UserLogin/upestate/' + id + '/' + state );
+  }
+
 }

@@ -3,9 +3,9 @@
     <strong>USERS IN APP:</strong>
     <ul>
         <li *ngFor="let us of userMatch" class="lis">
-           <div> <strong class="text-info">UID:</strong>  {{ us.name_user }}</div>
-           <br>
-           <div class="d-flex justify-content-between" >
+           <div class="d-flex justify-content-between"> <strong class="text-info">UID:</strong>  {{ us.name_user }}</div>
+           <div class="d-flex justify-content-between"> <strong class="text-info">STATE:</strong>{{ us.estado }}</div>
+           <div class="d-flex justify-content-between flex-column" >
                <strong class="text-info">UCOD:</strong> {{ us.cod_user }}
                <div class="b text-warning p-2 bg-dark" style="cursor: pointer;" (click)="match(us.cod_user)"> MATCH </div> 
            </div>
