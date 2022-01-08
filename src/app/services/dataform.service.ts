@@ -18,8 +18,20 @@ export class DataformService {
     return this.http.get( this.urlapi + 'stnotes/sel_Notes/' + codec + '/' + properties + '/' + order )
   }
 
-  delData(codec: string) {
-    return this.http.get( this.urlapi + 'stnotes/del_Notes/' + codec )
+  delData(ID: number) {
+    return this.http.get( this.urlapi + 'stnotes/del_Notes/' + ID )
+  }
+
+  saveCodecShar( model: any ) {
+    return this.http.post( this.urlapi + 'pshar/save_codec_shar', model )
+  }
+
+  gCshar() {
+    return this.http.get( this.urlapi + 'pshar/getcodecSHA' )
+  }
+
+  updateNotes( id: number, model: any ) {
+    return this.http.put( this.urlapi + 'stnotes/put_Notes/' + id, model );
   }
 
 }

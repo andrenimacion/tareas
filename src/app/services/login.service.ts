@@ -14,4 +14,8 @@ export class LoginService {
     return this.http.post( this.urlapi+'UserLogin/loginNotes', model );
   }
 
+  gUsers(PROPERTIES: string, filter: string, order: string) {
+    return this.http.get( this.urlapi + 'UserLogin/getuserNotes/' + PROPERTIES + '/' + filter + '/' + order );
+  }
+
 }
